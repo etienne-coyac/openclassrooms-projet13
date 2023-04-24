@@ -1,10 +1,9 @@
 import axios, { AxiosInstance } from "axios";
-import { LoginPayload, User } from "../types/types";
+import { LoginPayload } from "../types/types";
 import { userSchema } from "../types/schemas/schemas";
 
 export default class Client {
   private baseURL: string;
-  private _user?: User;
   private token?: string;
   axios: AxiosInstance;
   constructor(baseUrl: string) {
@@ -15,7 +14,7 @@ export default class Client {
   }
 
   async login(payload: LoginPayload): Promise<Client> {
-    if (!!this._user || !!this.token) {
+    if (this.token) {
       throw new Error("User already logged in.");
     }
     const res = await axios.post<{ body: { token: string } }>(`${this.baseURL}/user/login`, payload); //TODO: type response (data and error)
@@ -28,7 +27,7 @@ export default class Client {
   }
 
   parse(string: string): Client {
-    if (this.token !== undefined || this._user !== undefined) {
+    if (this.token !== undefined) {
       throw new Error("User already logged in.");
     }
     const json = JSON.parse(string);
@@ -36,7 +35,6 @@ export default class Client {
       throw new Error("Invalid string.");
     }
     this.token = json.token;
-    this._user = json.user;
     this.axios = axios.create({
       baseURL: this.baseURL,
       headers: { Authorization: this.token }
