@@ -1,5 +1,7 @@
 import React, { ReactNode, useContext, useState } from "react";
 import Client from "../api/client";
+import { useAppDispatch } from "../app/hooks";
+import { setUser } from "../app/features/userSlice";
 
 interface Auth {
   client: Client;
@@ -10,6 +12,7 @@ const authContext = React.createContext<Auth>(undefined!);
 
 const useAuthProvider = () => {
   const url = "http://localhost:3001/api/v1";
+  const dispatch = useAppDispatch();
   const [client, setClient] = useState<Client>(function () {
     const auth = localStorage.getItem("auth");
     if (auth === null) {
@@ -20,11 +23,22 @@ const useAuthProvider = () => {
 
   const signin = async (email: string, password: string, remember: boolean) => {
     try {
-      const client = await new Client(url).login({ email, password, remember });
-      localStorage.setItem("auth", client.stringify());
+      const client = await new Client(url).login({ email, password });
+      if (remember) {
+        localStorage.setItem("auth", client.stringify());
+      }
+      setClient(client);
+      const user = await client.profile.get();
+      dispatch(setUser(user));
     } catch (e) {
       /* empty */
     }
+  };
+
+  const signout = async () => {
+    //@TODO clear redux states
+    localStorage.clear();
+    setClient(new Client(url));
   };
 
   return {

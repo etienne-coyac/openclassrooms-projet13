@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { LoginPayload, User } from "../types/types";
+import { userSchema } from "../types/schemas/schemas";
 
 export default class Client {
   private baseURL: string;
@@ -18,8 +19,6 @@ export default class Client {
       throw new Error("User already logged in.");
     }
     const res = await axios.post<{ body: { token: string } }>(`${this.baseURL}/user/login`, payload); //TODO: type response (data and error)
-    console.log(res.data.body.token);
-
     this.token = res.data.body.token;
     this.axios = axios.create({
       baseURL: this.baseURL,
@@ -54,9 +53,16 @@ export default class Client {
     });
   }
 
-  //   get profile() {
-  //     async function get() {
-  //         const res = await axios.post()
-  //     }
-  //   }
+  get profile() {
+    if (this.axios === undefined) {
+      throw new Error("Axios is not defined.");
+    }
+    const axios = this.axios;
+    return {
+      async get() {
+        const res = await axios.post(`/user/profile`);
+        return userSchema.parse(res.data.body);
+      }
+    };
+  }
 }
