@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
 import argentBankLogo from "../assets/images/argentBankLogo.png";
+import { useAppSelector } from "../app/hooks";
+import { RootState } from "../app/store";
+import { useAuth } from "../hooks/clientContext";
 function Header() {
+  const profile = useAppSelector((state: RootState) => state.user.value);
+  const auth = useAuth();
+  const handleSignOut = () => {
+    auth.signout();
+  };
+
   return (
     <nav className="main-nav">
       <Link className="main-nav-logo" to="/">
@@ -8,10 +17,22 @@ function Header() {
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
       <div>
-        <Link className="main-nav-item" to="/sign-in">
-          <i className="fa fa-user-circle"></i>
-          Sign In
-        </Link>
+        {profile ? (
+          <>
+            <Link className="main-nav-item" to="/user">
+              <i className="fa fa-user-circle"></i>
+              {profile.firstName}
+            </Link>
+            <Link className="main-nav-item" to="/sign-in" onClick={handleSignOut}>
+              Sign Out
+            </Link>
+          </>
+        ) : (
+          <Link className="main-nav-item" to="/sign-in">
+            <i className="fa fa-user-circle"></i>
+            Sign In
+          </Link>
+        )}
       </div>
     </nav>
   );

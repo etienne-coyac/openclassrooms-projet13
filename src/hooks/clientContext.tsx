@@ -6,6 +6,7 @@ import { setUser } from "../app/features/userSlice";
 interface Auth {
   client: Client;
   signin: (email: string, password: string, remember: boolean) => void;
+  signout: () => void;
 }
 
 const authContext = React.createContext<Auth>(undefined!);
@@ -38,12 +39,18 @@ const useAuthProvider = () => {
   const signout = async () => {
     //@TODO clear redux states
     localStorage.clear();
+    clearRedux();
     setClient(new Client(url));
+  };
+
+  const clearRedux = () => {
+    dispatch(setUser(undefined));
   };
 
   return {
     client,
-    signin
+    signin,
+    signout
   };
 };
 
