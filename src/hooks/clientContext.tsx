@@ -29,8 +29,6 @@ const useAuthProvider = () => {
         localStorage.setItem("auth", client.stringify());
       }
       setClient(client);
-      const user = await client.profile.get();
-      dispatch(setUser(user));
     } catch (e) {
       /* empty */
     }
