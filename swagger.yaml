@@ -1,0 +1,146 @@
+swagger: '2.0'
+info:
+  title: API Transaction Argent Bank
+  version: 1.0.0
+schemes:
+  - https
+paths:
+  /transactions:
+    get:
+      summary: Get all transaction
+      tags:
+        - Transactions
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction list
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '401':
+          description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
+        '500':
+          description: INTERNAL_SERVER_ERROR
+      security:
+        - apiKey: []
+  /transaction:
+    post:
+      summary: Create a transaction
+      tags:
+        - Transactions
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          description: Transaction to create
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      responses:
+        '200':
+          description: Updated transaction
+          schema:
+            $ref: '#/definitions/Transaction'
+        '401':
+          description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
+        '500':
+          description: INTERNAL_SERVER_ERROR
+      security:
+        - apiKey: []
+  /transaction/{id}:
+    delete:
+      summary: Delete a transaction by ID
+      tags:
+        - Transactions
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of resource to delete
+          required: true
+          type: string
+          format: id
+        - in: body
+          description: Transaction to create
+          name: body
+          schema:
+            $ref: '#/definitions/Transaction'
+      responses:
+        '200':
+          description: Deleted transaction
+          schema:
+            $ref: '#/definitions/Transaction'
+        '401':
+          description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
+        '500':
+          description: INTERNAL_SERVER_ERROR
+      security:
+        - apiKey: []
+    patch:
+      summary: Update a transaction by ID
+      tags:
+        - Transactions
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of resource to update
+          required: true
+          type: string
+          format: id
+        - in: body
+          description: Transaction to create
+          name: body
+          required: false
+          schema:
+            $ref: '#/definitions/Transaction'
+      responses:
+        '200':
+          description: Updated transaction
+          schema:
+            $ref: '#/definitions/Transaction'
+        '401':
+          description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
+        '500':
+          description: INTERNAL_SERVER_ERROR
+      security:
+        - apiKey: []
+definitions:
+  Transaction:
+    type: object
+    properties:
+      date:
+        type: string
+      description:
+        type: string
+      amount:
+        type: string
+      balance:
+        type: string
+      type:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string
+responses: {}
+parameters: {}
+securityDefinitions:
+  apiKey:
+    type: apiKey
+    name: Authorization
+    in: header
+tags: []
