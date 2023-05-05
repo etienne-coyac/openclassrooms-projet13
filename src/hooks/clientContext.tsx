@@ -2,10 +2,11 @@ import React, { ReactNode, useContext, useState } from "react";
 import Client from "../api/client";
 import { useAppDispatch } from "../app/hooks";
 import { setUser } from "../app/features/userSlice";
+import { useNavigate } from "react-router-dom";
 
 interface Auth {
   client: Client;
-  signin: (email: string, password: string, remember: boolean) => void;
+  signin: (email: string, password: string, remember: boolean) => Promise<boolean>;
   signout: () => void;
 }
 
@@ -19,19 +20,25 @@ const useAuthProvider = () => {
     if (auth === null) {
       return new Client(url);
     }
-    return new Client(url).parse(auth);
+    const client = new Client(url).parse(auth);
+    client.profile.get().then((profile) => dispatch(setUser(profile)));
+    return client;
   });
 
   const signin = async (email: string, password: string, remember: boolean) => {
     try {
-      const client = await new Client(url).login({ email, password });
+      if (client.isLoggedIn()) {
+        throw new Error("User is already logged in.");
+      }
+      await client.login({ email, password });
       if (remember) {
         localStorage.setItem("auth", client.stringify());
       }
-      setClient(client);
+      dispatch(setUser(client.user));
     } catch (e) {
-      /* empty */
+      return false;
     }
+    return true;
   };
 
   const signout = async () => {

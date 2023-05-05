@@ -1,19 +1,28 @@
 import { FormEvent, useState } from "react";
 import { useAuth } from "../hooks/clientContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function SignIn() {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [remember, setRemember] = useState<boolean>(false);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      auth.signin(login, password, remember);
+      const res = await auth.signin(login, password, remember);
+      if (res === true) {
+        navigate("/user");
+      }
     } catch (e) {
-      console.log("NOOO", e);
+      console.log(e);
     }
   };
+
+  if (auth.client.isLoggedIn()) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <main className="main bg-dark">

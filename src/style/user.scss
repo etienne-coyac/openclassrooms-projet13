@@ -1,0 +1,22 @@
+@import "./constants.scss";
+
+.edit-section {
+  .edit-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    .edit-input {
+      font-size: 16px;
+      padding: 5px;
+    }
+  }
+  .edit-buttons {
+    gap: 15px;
+    justify-content: center;
+    display: flex;
+    .edit-button {
+      width: 90px;
+    }
+  }
+}

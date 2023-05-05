@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import argentBankLogo from "../assets/images/argentBankLogo.png";
 import { useAuth } from "../hooks/clientContext";
+import { useAppSelector } from "../app/hooks";
+import { RootState } from "../app/store";
 
 function Header() {
   const auth = useAuth();
-  const profile = auth.client.user;
+  const profile = useAppSelector((state: RootState) => state.user.value);
   const handleSignOut = () => {
     auth.signout();
   };

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { LoginPayload, User } from "../types/types";
+import { LoginPayload, User, UserUpdatePayload } from "../types/types";
 import { userSchema } from "../types/schemas/schemas";
 
 export default class Client {
@@ -9,7 +9,6 @@ export default class Client {
   axios: AxiosInstance;
   constructor(baseUrl: string) {
     this.baseURL = baseUrl;
-
     this.axios = axios.create({
       baseURL: this.baseURL
     });
@@ -43,6 +42,8 @@ export default class Client {
       baseURL: this.baseURL,
       headers: { Authorization: this.token }
     });
+    console.log(this.token);
+
     return this;
   }
 
@@ -56,10 +57,11 @@ export default class Client {
     });
   }
 
+  isLoggedIn(): boolean {
+    return this.token !== undefined;
+  }
+
   get user() {
-    if (this._user === undefined) {
-      throw "Please log in.";
-    }
     return this._user;
   }
 
@@ -71,6 +73,10 @@ export default class Client {
     return {
       async get() {
         const res = await axios.post(`/user/profile`);
+        return userSchema.parse(res.data.body);
+      },
+      async update(payload: UserUpdatePayload) {
+        const res = await axios.put(`/user/profile`, payload);
         return userSchema.parse(res.data.body);
       }
     };
