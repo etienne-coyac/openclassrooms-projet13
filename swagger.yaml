@@ -77,6 +77,8 @@ paths:
             $ref: "#/definitions/Transaction"
         "401":
           description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
+        "404":
+          description: NOT_FOUND
         "500":
           description: INTERNAL_SERVER_ERROR
       security:
@@ -109,6 +111,8 @@ paths:
             $ref: "#/definitions/Transaction"
         "401":
           description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
+        "404":
+          description: NOT_FOUND
         "500":
           description: INTERNAL_SERVER_ERROR
       security:

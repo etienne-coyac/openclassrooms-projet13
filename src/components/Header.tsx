@@ -24,12 +24,12 @@ function Header() {
               <i className="fa fa-user-circle"></i>
               {profile.firstName}
             </Link>
-            <Link className="main-nav-item" to="/sign-in" onClick={handleSignOut}>
+            <Link className="main-nav-item" to="/login" onClick={handleSignOut}>
               Sign Out
             </Link>
           </>
         ) : (
-          <Link className="main-nav-item" to="/sign-in">
+          <Link className="main-nav-item" to="/login">
             <i className="fa fa-user-circle"></i>
             Sign In
           </Link>

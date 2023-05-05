@@ -37,7 +37,7 @@ function User() {
   };
 
   if (!auth.client.isLoggedIn()) {
-    return <Navigate to="/sign-in" />;
+    return <Navigate to="/login" />;
   }
 
   return (

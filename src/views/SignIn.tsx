@@ -13,7 +13,7 @@ function SignIn() {
     try {
       const res = await auth.signin(login, password, remember);
       if (res === true) {
-        navigate("/user");
+        navigate("/profile");
       }
     } catch (e) {
       console.log(e);
