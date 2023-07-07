@@ -48,6 +48,8 @@ paths:
           description: Updated transaction
           schema:
             $ref: "#/definitions/Transaction"
+        "400":
+          description: BAD_REQUEST
         "401":
           description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
         "500":
@@ -55,34 +57,6 @@ paths:
       security:
         - apiKey: []
   /transaction/{id}:
-    delete:
-      summary: Delete a transaction by ID
-      tags:
-        - Transactions
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: id
-          in: path
-          description: ID of resource to delete
-          required: true
-          type: string
-          format: id
-      responses:
-        "200":
-          description: Deleted transaction
-          schema:
-            $ref: "#/definitions/Transaction"
-        "401":
-          description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
-        "404":
-          description: NOT_FOUND
-        "500":
-          description: INTERNAL_SERVER_ERROR
-      security:
-        - apiKey: []
     patch:
       summary: Update a transaction by ID
       tags:
@@ -99,20 +73,55 @@ paths:
           type: string
           format: id
         - in: body
-          description: Transaction to create
+          description: Transaction to update
           name: body
-          required: false
+          required: true
           schema:
-            $ref: "#/definitions/Transaction"
+            type: object
+            properties:
+              category:
+                type: string
+              notes:
+                type: string
       responses:
         "200":
           description: Updated transaction
-          schema:
-            $ref: "#/definitions/Transaction"
+        "400":
+          description: BAD_REQUEST
         "401":
           description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
         "404":
           description: NOT_FOUND
+        "500":
+          description: INTERNAL_SERVER_ERROR
+      security:
+        - apiKey: []
+    get:
+      summary: Get one transaction by ID
+      tags:
+        - Transactions
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of resource to get
+          required: true
+          type: string
+          format: id
+      responses:
+        "200":
+          description: Transaction list
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Transaction"
+        "400":
+          description: BAD_REQUEST
+        "401":
+          description: UNAUTHORIZED_USER_WRONG_PASSWORD_OR_EMAIL
         "500":
           description: INTERNAL_SERVER_ERROR
       security:
